@@ -23,14 +23,30 @@
 %%%
 %%% Good Luck
 %%%-------------------------------------------------------------------
--module(mnesia_node_rename).
-
+-module(mrename).
+-export([main/0,
+	main/1]).
 %% API
 -export([start/3,view/1]).
 
 %%%===================================================================
 %%% API
 %%%===================================================================
+
+main() ->
+	List = init:get_plain_arguments(),
+	main(List).
+main(Args) ->
+	{ok, _} = application:ensure_all_started(mrename),
+	main_(Args).
+main_(["rename", SchemaFile, OldNode, NewNode]) ->
+	start(SchemaFile, OldNode, NewNode);
+main_(["view",SchemaFile]) ->
+	view(SchemaFile);
+main_(_) ->
+	io:format("~ts~n",["./mrename rename SchemaFile OldNodeName NewNodeName -- change nodename"]),
+	io:format("~ts~n",["./mrename view SchemaFile -- view nodename"]).
+
 start(SchemaFile, OldNode, NewNode) ->
     {ok, N} = dets:open_file(schema, [{file, SchemaFile},{repair,false}, {keypos, 2}]),
     rename(N, dets:first(N), {OldNode, NewNode}),
