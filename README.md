@@ -22,7 +22,7 @@ How to use ?
     ```
     remote  env help: 
     ```shell
-        $ ./rebar3 as prod tar
+        $ make tar
         $ croc send _build/prod/rel/mrename/mrename-0.1.0.tar.gz
         $ bin/mrename escript bin/mr view SchemaFile
     ```
